@@ -16,7 +16,7 @@ var (
 )
 
 func main() {
-	if err := logger.Start("disclog"); err != nil {
+	if err := logger.Start("/tmp/disclog"); err != nil {
 		log.Fatal(err)
 	}
 	defer logger.Stop()
