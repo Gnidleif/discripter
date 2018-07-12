@@ -28,7 +28,7 @@ type DiscordMsg struct {
 	Channel string
 	Author  string
 	Msg     string
-	Error   error      `json:",omitempty"`
+	Error   string     `json:",omitempty"`
 	Action  *ScriptMsg `json:",omitempty"`
 }
 
@@ -80,7 +80,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	res, err := inv.Run(cmds[0], cmds[1:]...)
 	if err != nil {
-		dm.Error = err
+		dm.Error = err.Error()
 		return
 	}
 
