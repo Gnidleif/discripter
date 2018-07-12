@@ -1,6 +1,7 @@
 package invoker
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -55,7 +56,7 @@ func New(abspath string) (*Invoker, error) {
 	}, nil
 }
 
-func (i *Invoker) Run(script string, args ...string) ([]byte, error) {
+func (i *Invoker) Run(script string, args ...string) (*bytes.Buffer, error) {
 	fi, ok := i.Scripts[script]
 	if !ok {
 		return nil, fmt.Errorf("invoke error: invalid script name %s", script)
@@ -72,5 +73,5 @@ func (i *Invoker) Run(script string, args ...string) ([]byte, error) {
 		return nil, errors.New("invoke error: no result from script")
 	}
 
-	return out, nil
+	return bytes.NewBuffer(out), nil
 }

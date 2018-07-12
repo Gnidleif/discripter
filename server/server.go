@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bytes"
 	"fmt"
 	"regexp"
 	"strings"
@@ -34,7 +35,7 @@ type DiscordMsg struct {
 type ScriptMsg struct {
 	Script string
 	Args   []string
-	Result []byte
+	Result *bytes.Buffer
 }
 
 func Start(token, scriptdir string) error {
