@@ -5,23 +5,25 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/Gnidleif/discripter/logger"
 	"github.com/Gnidleif/discripter/server"
 )
 
 var (
-	Token     string
-	ScriptDir string
+	token     string
+	scriptDir string
+	logDir    string
 )
 
 func main() {
-	if err := logger.Start("/tmp/disclog"); err != nil {
+	if err := logger.Start(logDir); err != nil {
 		log.Fatal(err)
 	}
 	defer logger.Stop()
 
-	if err := server.Start(Token, ScriptDir); err != nil {
+	if err := server.Start(token, scriptDir); err != nil {
 		log.Fatal(err)
 	}
 	defer server.Stop()
@@ -32,11 +34,12 @@ func main() {
 }
 
 func init() {
-	flag.StringVar(&Token, "t", "", "Bot token")
-	flag.StringVar(&ScriptDir, "d", "", "Script directory")
+	flag.StringVar(&token, "t", os.Getenv("DGB_TOKEN"), "Bot token")
+	flag.StringVar(&scriptDir, "d", os.Getenv("DG_SCRIPTS"), "Script directory")
+	flag.StringVar(&logDir, "l", "/tmp/disclog", "Log directory")
 	flag.Parse()
 
-	if Token == "" || ScriptDir == "" {
+	if token == "" || scriptDir == "" {
 		log.Fatal(errors.New("flag error: token and script directory can't be empty"))
 	}
 }

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -33,7 +34,7 @@ type DiscordMsg struct {
 type ScriptMsg struct {
 	Script string
 	Args   []string
-	Result string
+	Result []byte
 }
 
 func Start(token, scriptdir string) error {
@@ -88,7 +89,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		Result: res,
 	}
 
-	s.ChannelMessageSend(m.ChannelID, dm.Action.Result)
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("`%s`", dm.Action.Result))
 }
 
 func Stop() error {

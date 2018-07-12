@@ -55,22 +55,22 @@ func New(abspath string) (*Invoker, error) {
 	}, nil
 }
 
-func (i *Invoker) Run(script string, args ...string) (string, error) {
+func (i *Invoker) Run(script string, args ...string) ([]byte, error) {
 	fi, ok := i.Scripts[script]
 	if !ok {
-		return "", fmt.Errorf("invoke error: invalid script name %s", script)
+		return nil, fmt.Errorf("invoke error: invalid script name %s", script)
 	}
 
 	run := fmt.Sprintf("%s/%s/%s", i.Dir, script, fi.Name())
 
 	out, err := exec.Command(run, args...).Output()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if len(out) == 0 {
-		return "", errors.New("invoke error: no result from script")
+		return nil, errors.New("invoke error: no result from script")
 	}
 
-	return fmt.Sprintf("`%s`", out), nil
+	return out, nil
 }
